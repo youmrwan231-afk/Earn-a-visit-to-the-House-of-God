@@ -3,27 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عرض خاص الجزائر</title>
+<title>عرض الجزائر</title>
 
 <style>
 body{
   margin:0;
   font-family:Tahoma;
   background:#f4f4f4;
-  text-align:center;
   direction:rtl;
+  text-align:center;
 }
 
-/* Header */
 .header{
   background:#007a3d;
   color:#fff;
   padding:15px;
-  font-size:18px;
   font-weight:bold;
 }
 
-/* Container */
 .container{
   max-width:420px;
   margin:20px auto;
@@ -33,31 +30,18 @@ body{
   box-shadow:0 0 10px #00000020;
 }
 
-h1{
-  font-size:20px;
-  color:#007a3d;
-}
-
-p{
-  color:#555;
-  font-size:14px;
-}
-
-/* Button */
 .btn{
   width:100%;
   padding:14px;
-  margin-top:15px;
+  margin-top:10px;
   border:none;
   border-radius:10px;
   background:#007a3d;
   color:#fff;
   font-weight:bold;
-  font-size:16px;
   cursor:pointer;
 }
 
-/* Wheel */
 .wheel-container{
   position:relative;
   width:260px;
@@ -70,8 +54,6 @@ p{
   top:-10px;
   left:50%;
   transform:translateX(-50%);
-  font-size:28px;
-  color:#007a3d;
 }
 
 canvas{
@@ -80,33 +62,23 @@ canvas{
   transition:3s ease;
 }
 
-/* Sections */
-#result,#steps{
+#network,#result,#sms,#steps{
   display:none;
-}
-
-.badge{
-  background:#e6f4ea;
-  padding:10px;
-  border-radius:10px;
-  margin-top:10px;
-  color:#007a3d;
-  font-weight:bold;
-}
-
-.steps-box{
-  text-align:right;
-  background:#f9f9f9;
-  padding:15px;
-  border-radius:10px;
-  margin-top:15px;
-  font-size:14px;
 }
 
 .fake{
   font-size:12px;
   color:#888;
-  margin-top:10px;
+}
+
+.sms-box{
+  background:#000;
+  color:#0f0;
+  padding:15px;
+  border-radius:10px;
+  text-align:left;
+  font-size:13px;
+  margin-top:15px;
 }
 </style>
 </head>
@@ -119,46 +91,51 @@ canvas{
 
 <div class="container">
 
-<h1>🎁 بونيس انترنت و رصيد</h1>
-<p>عرض خاص لمشتركي Mobilis / Djezzy / Ooredoo</p>
+<h3>🎁 بونيس انترنت + فليكسي</h3>
 
-<!-- SPIN -->
+<!-- Spin -->
 <div id="spinSection">
+  <div class="wheel-container">
+    <div class="pointer">▼</div>
+    <canvas id="wheelCanvas" width="260" height="260"></canvas>
+  </div>
 
-<div class="wheel-container">
-  <div class="pointer">▼</div>
-  <canvas id="wheelCanvas" width="260" height="260"></canvas>
+  <button class="btn" onclick="spin()">شوف واش ربحت</button>
+  <div class="fake">✔ اكثر من 120 شخص ربح اليوم</div>
 </div>
 
-<button class="btn" onclick="spin()">شوف واش ربحت</button>
-
-<div class="fake">
-✔ العرض متاح اليوم فقط<br>
-✔ اكثر من 97 واحد ربح اليوم
+<!-- Network -->
+<div id="network">
+  <h3>اختار الشبكة ديالك</h3>
+  <button class="btn" onclick="next()">Mobilis</button>
+  <button class="btn" onclick="next()">Djezzy</button>
+  <button class="btn" onclick="next()">Ooredoo</button>
 </div>
 
-</div>
-
-<!-- RESULT -->
+<!-- Result -->
 <div id="result">
-  <h1>🎉 مبروك عليك</h1>
-  <div class="badge">
-    ربحت 3000 DA فليكسي + 1GB انترنت
-  </div>
-  <button class="btn" onclick="showSteps()">كيفاش تستلم الجائزة</button>
+  <h3>🎉 مبروك!</h3>
+  <p>ربحت 3000 DA فليكسي + 1GB</p>
+  <button class="btn" onclick="showSMS()">تأكيد الرقم</button>
 </div>
 
-<!-- STEPS -->
-<div id="steps">
-  <h1>📲 طريقة استلام الجائزة</h1>
-
-  <div class="steps-box">
-    1️⃣ ادخل للعرض من الزر لي تحت 👇<br><br>
-    2️⃣ دير تسجيل برقم الهاتف ديالك 📱<br><br>
-    3️⃣ اكد الكود لي يوصلك SMS 🔐<br><br>
-    4️⃣ ومن بعد توصلك الجائزة ديالك مباشرة 🎁
+<!-- Fake SMS -->
+<div id="sms">
+  <h3>📩 تأكيد الرقم</h3>
+  <div class="sms-box">
+    SMS: Code verification 4839<br>
+    Please confirm to receive your reward
   </div>
+  <button class="btn" onclick="showSteps()">تأكيد الكود</button>
+</div>
 
+<!-- Steps -->
+<div id="steps">
+  <h3>📲 الخطوة الأخيرة</h3>
+  <p>
+  ادخل للعرض و دير تسجيل برقمك<br>
+  ومن بعد اكد الكود باش تستلم الجائزة
+  </p>
   <button class="btn" onclick="go()">الدخول للعرض</button>
 </div>
 
@@ -166,12 +143,11 @@ canvas{
 
 <script>
 
-/* 🔥 Monetizer Link */
 const CPA_LINK = "https://leads.leadseagle.shop/?utm_medium=ce4978d0d6578edb7183a252c2bd29961e3c9e40&utm_campaign=DZ";
 
 /* Wheel */
-const rewards = ["0","500 DA","1GB","1000 DA","Bonus","3000 DA"];
-const colors = ["#ff4d4d","#00c851","#ffbb33","#33b5e5","#aa66cc","#2ecc71"];
+const rewards = ["0","500","1GB","1000","Bonus","3000"];
+const colors = ["#f00","#0f0","#ff0","#0af","#f0f","#0f8"];
 
 const canvas = document.getElementById("wheelCanvas");
 const ctx = canvas.getContext("2d");
@@ -191,41 +167,42 @@ function drawWheel(){
     ctx.translate(130,130);
     ctx.rotate(i*angle + angle/2);
     ctx.fillStyle="#000";
-    ctx.font="bold 13px Arial";
     ctx.fillText(rewards[i],50,5);
     ctx.restore();
   }
 }
-
 drawWheel();
 
-/* Spin */
 let spun=false;
 
 function spin(){
   if(spun) return;
   spun=true;
 
-  let wheel = document.getElementById("wheelCanvas");
-
-  let targetIndex = 5;
-  let deg = 3600 + (targetIndex * (360 / slices));
-
-  wheel.style.transform="rotate("+deg+"deg)";
+  let deg = 3600 + (5 * (360 / slices));
+  canvas.style.transform="rotate("+deg+"deg)";
 
   setTimeout(()=>{
     document.getElementById("spinSection").style.display="none";
-    document.getElementById("result").style.display="block";
+    document.getElementById("network").style.display="block";
   },3000);
 }
 
-/* Show Steps */
-function showSteps(){
+function next(){
+  document.getElementById("network").style.display="none";
+  document.getElementById("result").style.display="block";
+}
+
+function showSMS(){
   document.getElementById("result").style.display="none";
+  document.getElementById("sms").style.display="block";
+}
+
+function showSteps(){
+  document.getElementById("sms").style.display="none";
   document.getElementById("steps").style.display="block";
 }
 
-/* Redirect */
 function go(){
   window.location.href = CPA_LINK;
 }
